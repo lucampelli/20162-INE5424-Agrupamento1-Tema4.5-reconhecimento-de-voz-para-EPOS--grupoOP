@@ -7,10 +7,10 @@ Reconhecimento de comandos para controle de objetos inteligentes no Epos:
 Lista de Atividades:
 
 Epos Deve:
-1 - Criar aplica��o para o EposMote3 que Leia sinais enviados pelo microfone
+1 - Criar aplicação para o EposMote3 que Leia sinais enviados pelo microfone
 2 - Identificar possiveis comandos dentre os sinais recebidos
 3 - Comprimir arquivo de audio contendo possivel comando
-4 - Enviar arquivo de audio para rede AdHoc de Epos at� uma central
+4 - Enviar arquivo de audio para rede AdHoc de Epos até uma central
 Central deve:
 5 - Receber e decodificar audio
 6 - Codificar audio para .flac
@@ -20,11 +20,38 @@ Central deve:
 Epos deve: 
 10 - Executar comando pedido
 
+Possível planejamento de Etapas do processo:
+1 - Checagem periódica lenta, a procura de um possível comando.
+2 - Caso reconheça uma alteração no sinal começar a gravar, se após 3-4 seg a alteração não cessar, descartar.
+3 - Se cessar é um possível comando.
+4 - Dividir dados em sessões de 20ns, e aplicar DFT (Discrete Fourier Transform) para transformar no domínio da frequencia
+5 - Remover frequencias indevidas.
+6 - Fazer compressão LZ
+7 - Enviar
+8 - No computador descomprimir e decodificar de volta ao domínio de tempo
+9 - Gerar um arquivo .flac
+10 - enviar ao google e aguardar resposta
+11 - enviar resposta ao EPOS e prosseguir com comando
 
 Lista de requisitos:
 
 - Google Speach Api recebe arquivos .flac
-- Google Speach Api aceita 60min mensais de Audio gr�tis.
+- Google Speach Api aceita 60min mensais de Audio grátis.
 - Envio de dados pela rede AdHoc de epos deve ser maximizado.
-- Desde a fala at� a execu��o do comando deve decorrer no m�ximo 5 seg
+- Desde a fala até a execução do comando deve decorrer no máximo 5 seg
+
+Requisitos do Professor (Cliente):
+RF01: Desenvolver um componente do SO que receba áudio de uma fonte analógica e extraia informações sobre a amplitude em cada faixa de frequência audível
+
+RF02: Com base no processamento do áudio (domínio da frequência), descobrir se há algum som ambiente (além do ruído de fundo) ou não
+
+RF03: Com base no processamento do áudio (domínio da frequência), descobrir se o som ambiente corresponde à voz humana
+
+RF04: Se houve voz humana sendo emitida por cerca de 3~4 segundos e depois parou por pelo menos 1 segundo, identificar isso como um possível comando de voz e enviar o mínimo de informação possível pela rede sem fio que permita a posterior identificação das palavras ditas
+
+RF05. Receber uma mensagem pela rede sem fio e, se for um comando reconhecido, executá-lo
+
+RNF01. O sistema deve executar sobre a plataforma EposMotes III (desenvolvimento e testes podem ser feitos inicialmente sobre Epos para PC)
+
+RNF02. A banda utilizada para transmissão do áudio processado deve ser mínima.
 -   

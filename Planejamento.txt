@@ -1,0 +1,30 @@
+
+Planejamento Tabalho Final SOII
+
+
+Reconhecimento de comandos para controle de objetos inteligentes no Epos:
+
+Lista de Atividades:
+
+Epos Deve:
+1 - Criar aplicação para o EposMote3 que Leia sinais enviados pelo microfone
+2 - Identificar possiveis comandos dentre os sinais recebidos
+3 - Comprimir arquivo de audio contendo possivel comando
+4 - Enviar arquivo de audio para rede AdHoc de Epos até uma central
+Central deve:
+5 - Receber e decodificar audio
+6 - Codificar audio para .flac
+7 - Enviar para a Google Speach Api
+8 - Receber e interpretar comando
+9 - Enviar comando novamente para o Epos que o requisitou
+Epos deve: 
+10 - Executar comando pedido
+
+
+Lista de requisitos:
+
+- Google Speach Api recebe arquivos .flac
+- Google Speach Api aceita 60min mensais de Audio grátis.
+- Envio de dados pela rede AdHoc de epos deve ser maximizado.
+- Desde a fala até a execução do comando deve decorrer no máximo 5 seg
+-   

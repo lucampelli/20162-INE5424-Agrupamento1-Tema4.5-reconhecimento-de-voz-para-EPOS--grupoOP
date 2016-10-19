@@ -71,7 +71,7 @@ float mysin(float value){		//não tem pq nao funcionar
 	return sin;
 }
 
-float mycos(float value){			//por algum motivo nao funciona porra
+float mycos(float value){			//por algum motivo nao funciona
 	return mysin(value + PI/2);
 }
 
@@ -136,6 +136,8 @@ int sample(){
 		if(i >= SIZE){
 			i = 0;
 			print();
+			//FDFT();
+			//send();
 		}
 
 		Periodic_Thread::wait_next();
@@ -146,7 +148,6 @@ int sample(){
 int main()
 {
 	Periodic_Thread thread((Periodic_Thread::Microsecond)500, &sample);
-	//Periodic_Thread thread2((Periodic_Thread::Microsecond)20000, &send);
 	thread.join();
     
     return 0;

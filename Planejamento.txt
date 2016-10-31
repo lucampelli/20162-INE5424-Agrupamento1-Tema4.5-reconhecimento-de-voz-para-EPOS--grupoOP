@@ -42,16 +42,22 @@ Lista de requisitos:
 
 Requisitos do Professor (Cliente):
 RF01: Desenvolver um componente do SO que receba áudio de uma fonte analógica e extraia informações sobre a amplitude em cada faixa de frequência audível
+-> Componente feito porém com amostragem menor que a necessária (4x menor)
 
 RF02: Com base no processamento do áudio (domínio da frequência), descobrir se há algum som ambiente (além do ruído de fundo) ou não
+->dominio da frequencia ainda não atingido
 
 RF03: Com base no processamento do áudio (domínio da frequência), descobrir se o som ambiente corresponde à voz humana
+->desnecessario pelo RF02
 
 RF04: Se houve voz humana sendo emitida por cerca de 3~4 segundos e depois parou por pelo menos 1 segundo, identificar isso como um possível comando de voz e enviar o mínimo de informação possível pela rede sem fio que permita a posterior identificação das palavras ditas
+->Epos não consegue armazenar mais de 2 segundos de amostras, impossível
 
 RF05. Receber uma mensagem pela rede sem fio e, se for um comando reconhecido, executá-lo
+->Nic necessita de debugajem
 
-RNF01. O sistema deve executar sobre a plataforma EposMotes III (desenvolvimento e testes podem ser feitos inicialmente sobre Epos para PC)
+RNF01. O sistema deve executar sobre a plataforma EposMotes III (desenvolvimento e testes podem ser feitos inicialmente sobre Epos para PC) ok
 
 RNF02. A banda utilizada para transmissão do áudio processado deve ser mínima.
+-> veremos
 -   

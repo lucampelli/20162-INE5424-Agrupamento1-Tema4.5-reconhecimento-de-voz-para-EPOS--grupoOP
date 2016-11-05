@@ -1,7 +1,8 @@
+#include "Wav.h"
 
-using namespace std;
+
 namespace little_endian_io {
-
+    
     template <typename Word>
     std::ostream& write_word(std::ostream& outs, Word value, unsigned size = sizeof ( Word)) {
         for (; size; --size, value >>= 8)
@@ -10,15 +11,15 @@ namespace little_endian_io {
     }
 }
 
-#include "Wav.h"
-
 using namespace little_endian_io;
 
 
     //Starting the header:
     
     Wav::Wav(string nome) {
-        f = ofstream(nome+".wav", ios::binary);
+        char* t= strcat(strdup(nome.c_str()),".wav");
+        
+        ofstream f(t, ios::binary);
 
         // Write the file headers
         f << "RIFF----WAVEfmt "; // (chunk size to be filled in later)
@@ -36,7 +37,7 @@ using namespace little_endian_io;
 
     }
 
-    void Wav::addSample(int sample) {
+    void Wav::addSample(unsigned char sample) {
         write_word(f, sample, 2);
     }
 

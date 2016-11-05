@@ -7,6 +7,7 @@
 #include <unistd.h>
 
 #include "Usb_Extractor.h"
+#include "Wav.h"
 
 Usb_Extractor::Usb_Extractor() {
 
@@ -62,42 +63,51 @@ void Usb_Extractor::set_mincount(int fd, int mcount) {
 }
 
 int Usb_Extractor::takeFromUSB() {
-    char *portname = "/dev/ttyACM0";
+    char *portname = "/dev/ttyACM0"; //Port for taking information
     int fd;
     int wlen;
-
+    printf("Trying to Open Archive\n");
+ 
+    while(access("/dev/ttyACM0", F_OK) == -1) sleep(1);//Until file do not exists
+    
     fd = open(portname, O_RDWR | O_NOCTTY | O_SYNC);
-    if (fd < 0) {
-        printf("Error opening %s: %s\n", portname, strerror(errno));
-        return -1;
+    if(fd < 0){
+       cout<< "Error while opening archive"<< errno << endl;
+       return -1;
     }
+        
+    printf("Opened\n");
     /*baudrate 115200, 8 bits, no parity, 1 stop bit */
     set_interface_attribs(fd, B115200);
-    //set_mincount(fd, 0);                /* set to pure timed read */
 
-    /* simple output */
-    wlen = write(fd, "Hello!\n", 7);
-    if (wlen != 7) {
-        printf("Error from write: %d, %d\n", wlen, errno);
-    }
-    tcdrain(fd); /* delay for output */
-
-
+    /*--TESTING OUTPUT--*/
+    //wlen = write(fd, "Hello!\n", 7);
+    //if (wlen != 7) {
+    //    printf("Error from write: %d, %d\n", wlen, errno);
+    //}
+    //tcdrain(fd); /* delay for output */
+    
+    
     /* simple noncanonical input */
-    do {
-        unsigned char buf;
-        int rdlen;
-
-        rdlen = read(fd, buf, 8); //rdlen = read(fd, buf, sizeof(buf) - 1); 
+    unsigned char buf;
+    int rdlen;
+    
+    //while(buf != '/i');//Caracter início
+    printf("Criando Wav:\n");
+    Wav* wave = new Wav("teste");
+    
+    while (buf != '6') {//Caracter Fim
+        rdlen = read(fd, &buf, 1);
         if (rdlen > 0) {
 
-            printf("Read %d:", rdlen);
-            printf("Read %c:", buf); //Adicionado
-            printf("\n");
+            printf("Sample: %c", buf);
+            wave->addSample(buf);
 
         } else if (rdlen < 0) {
             printf("Error from read: %d: %s\n", rdlen, strerror(errno));
         }
-        /* repeat read to get full message */
-    } while (1);
+    }
+    wave->endWav();
+    printf("Wav Criado\n");
+
 }

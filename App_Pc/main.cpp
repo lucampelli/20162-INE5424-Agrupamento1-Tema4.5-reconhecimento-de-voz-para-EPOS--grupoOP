@@ -7,13 +7,16 @@
 
 #include <cstdlib>
 
+#include "Usb_Extractor.h"
+
 using namespace std;
 
 /*
  * 
  */
 int main(int argc, char** argv) {
-
+    Usb_Extractor* extractor = new Usb_Extractor();
+    extractor->takeFromUSB();
     return 0;
 }
 

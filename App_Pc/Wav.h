@@ -6,6 +6,7 @@
  */
 #include <cmath>
 #include <fstream>
+#include "string.h"
 #include <iostream>
 
 #ifndef WAV_H
@@ -22,9 +23,9 @@ private:
 
 public:
 
-    Wav(string name);
+    Wav(string nome);
 
-    void addSample(int sample);
+    void addSample(unsigned char sample);
 
     void endWav();
 

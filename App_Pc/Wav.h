@@ -18,14 +18,13 @@ using namespace std;
 
 class Wav {
 private:
-    ofstream f;
     size_t data_chunk_pos;
 
 public:
 
     Wav(string nome);
 
-    void addSample(unsigned char sample);
+    void addSample(int sample);
 
     void endWav();
 

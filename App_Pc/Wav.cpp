@@ -13,38 +13,40 @@ namespace little_endian_io {
 
 using namespace little_endian_io;
 
-
     //Starting the header:
-    
-    Wav::Wav(string nome) {
-        char* t= strcat(strdup(nome.c_str()),".wav");
-        
-        ofstream f(t, ios::binary);
+    ofstream f("/home/lucampelli/Test1.wav", ios::binary);
 
+
+    Wav::Wav(string nome) {
+ 
+        //char* t= strcat(strdup(nome.c_str()),".wav");
+        
+        
+        
         // Write the file headers
         f << "RIFF----WAVEfmt "; // (chunk size to be filled in later)
         write_word(f, 16, 4); // no extension data
         write_word(f, 1, 2); // PCM - integer samples
-        write_word(f, 2, 2); // two channels (stereo file)
-        write_word(f, 44100, 4); // samples per second (Hz)
-        write_word(f, 176400, 4); // (Sample Rate * BitsPerSample * Channels) / 8
-        write_word(f, 4, 2); // data block size (size of two integer samples, one for each channel, in bytes)
+        write_word(f, 1, 2); // two channels (stereo file)
+        write_word(f, 8000, 4); // samples per second (Hz)
+        write_word(f, 16000, 4); // (Sample Rate * BitsPerSample * Channels) / 8
+        write_word(f, 2, 2); // data block size (size of two integer samples, one for each channel, in bytes)
         write_word(f, 16, 2); // number of bits per sample (use a multiple of 8)
 
         // Write the data chunk header
         data_chunk_pos = f.tellp();
         f << "data----"; // (chunk size to be filled in later)
-
     }
 
-    void Wav::addSample(unsigned char sample) {
+    void Wav::addSample(int sample) {
+        cout<<"Sample"<<sample<<endl;
         write_word(f, sample, 2);
     }
 
     void Wav::endWav() {
         // (We'll need the final file size to fix the chunk sizes above)
         size_t file_length = f.tellp();
-
+        cout<<"File Length "<<file_length;
         // Fix the data chunk header to contain the data size
         f.seekp(data_chunk_pos + 4);
         write_word(f, file_length - data_chunk_pos + 8);

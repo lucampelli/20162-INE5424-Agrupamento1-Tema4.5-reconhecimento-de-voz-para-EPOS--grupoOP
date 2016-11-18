@@ -96,12 +96,12 @@ int Usb_Extractor::takeFromUSB() {
     printf("Criando Wav:\n");
     Wav* wave = new Wav("teste");
     
-    while (buf != '6') {//Caracter Fim
+    while (buf != 'j') {//Caracter Fim
         rdlen = read(fd, &buf, 1);
         if (rdlen > 0) {
 
-            printf("Sample: %c", buf);
-            wave->addSample(buf);
+            //printf("Sample: %hho", buf);
+            wave->addSample(buf * 100);
 
         } else if (rdlen < 0) {
             printf("Error from read: %d: %s\n", rdlen, strerror(errno));

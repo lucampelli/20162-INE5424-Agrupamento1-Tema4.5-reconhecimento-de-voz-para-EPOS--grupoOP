@@ -19,7 +19,7 @@ using namespace little_endian_io;
     Wav::Wav(string nome) {
         char* t= strcat(strdup(nome.c_str()),".wav");
         
-        ofstream f(t, ios::binary);
+        ofstream this->f(t, ios::binary);
 
         // Write the file headers
         f << "RIFF----WAVEfmt "; // (chunk size to be filled in later)

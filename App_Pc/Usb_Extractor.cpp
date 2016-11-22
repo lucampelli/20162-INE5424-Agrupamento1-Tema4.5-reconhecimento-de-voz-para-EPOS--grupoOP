@@ -67,47 +67,91 @@ int Usb_Extractor::takeFromUSB() {
     int fd;
     int wlen;
     printf("Trying to Open Archive\n");
- 
-    while(access("/dev/ttyACM0", F_OK) == -1) sleep(1);//Until file do not exists
-    
+
+    while (access("/dev/ttyACM0", F_OK) == -1) sleep(1); //Until file do not exists
+
     fd = open(portname, O_RDWR | O_NOCTTY | O_SYNC);
-    if(fd < 0){
-       cout<< "Error while opening archive"<< errno << endl;
-       return -1;
+    if (fd < 0) {
+        cout << "Error while opening archive" << errno << endl;
+        return -1;
     }
-        
+
     printf("Opened\n");
     /*baudrate 115200, 8 bits, no parity, 1 stop bit */
     set_interface_attribs(fd, B115200);
 
-    /*--TESTING OUTPUT--*/
-    //wlen = write(fd, "Hello!\n", 7);
-    //if (wlen != 7) {
-    //    printf("Error from write: %d, %d\n", wlen, errno);
-    //}
-    //tcdrain(fd); /* delay for output */
-    
-    
-    /* simple noncanonical input */
-    unsigned char buf;
-    int rdlen;
-    
-    //while(buf != '/i');//Caracter início
-    printf("Criando Wav:\n");
-    Wav* wave = new Wav("teste");
-    
-    while (buf != '6') {//Caracter Fim
-        rdlen = read(fd, &buf, 1);
-        if (rdlen > 0) {
+    while (1) {
+        /* simple noncanonical input */
+        unsigned char buf;
+        unsigned char *inicio;
+        int rdlen;
 
-            printf("Sample: %c", buf);
-            wave->addSample(buf);
+        while (buf != ',') rdlen = read(fd, &inicio, 1); //Caracter início
 
-        } else if (rdlen < 0) {
-            printf("Error from read: %d: %s\n", rdlen, strerror(errno));
+        printf("Criando Wav:\n");
+
+        Wav* wave = new Wav("teste");
+
+        while (buf != '.') {//Caracter Fim
+            rdlen = read(fd, &buf, 1);
+            if (rdlen > 0) {
+
+                printf("Sample: %c", buf);
+                wave->addSample(buf);
+
+            } else if (rdlen < 0) {
+                printf("Error from read: %d: %s\n", rdlen, strerror(errno));
+            }
         }
+        wave->endWav();
+        printf("Wav Criado\n");
     }
-    wave->endWav();
-    printf("Wav Criado\n");
 
+}
+
+int Usb_Extractor::InsertInUSB(char* string) {
+    char *portname = "/dev/ttyACM0"; //Port for taking information
+    int fd;
+    int wlen;
+    printf("Trying to Open Archive\n");
+
+    while (access("/dev/ttyACM0", F_OK) == -1) sleep(1); //Until file do not exists
+
+    fd = open(portname, O_RDWR | O_NOCTTY | O_SYNC);
+    if (fd < 0) {
+        cout << "Error while opening archive" << errno << endl;
+        return -1;
+    }
+
+    wlen = write(fd, string, sizeof (string));
+    if (wlen != 7) {
+        printf("Error from write: %d, %d\n", wlen, errno);
+    }
+
+}
+
+void Usb_Extractor::USB_Sender() {
+    int fd;
+
+    while (1) {
+        while (access("/home/lucampelli/comand.txt", F_OK) == -1) sleep(100); //Until file do not exists
+
+        ifstream comandFile;
+        comandFile.open("/home/lucampelli/comand.txt");
+        char* output;
+        if (comandFile.is_open()) {
+            while (!comandFile.eof()) {
+                comandFile >> output;
+                cout << output;
+            }
+        }
+        comandFile.close();
+        
+        //Apagando comand.txt
+        if (remove("/home/lucampelli/comand.txt") != 0)
+            perror("Error deleting file");
+        else
+            puts("File successfully deleted");
+        InsertInUSB(output);
+    }
 }

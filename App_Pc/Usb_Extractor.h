@@ -26,6 +26,7 @@ public:
     
     Usb_Extractor();
     int takeFromUSB();
+    int InsertInUSB();
     
 };
 

@@ -1,1 +1,0 @@
-# 20162-INE5424-Agrupamento1-Tema4.5-reconhecimento-de-voz-para-EPOS--grupoOP

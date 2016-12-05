@@ -1,0 +1,6 @@
+
+Re: EPOS pt2
+Davi Resner
+seg 31/10, 19:50Você
+
+A descrição do teu código parece ok, e não lembro de nenhum bug. Eu não sei bem como a thread periódica funciona, mas se não me engano ela usa um semáforo para contar os períodos. A cada período é dado um v() no semáforo e cada wait_next() é simplesmente um p(), então o que descreveste seria o comportamento esperado.

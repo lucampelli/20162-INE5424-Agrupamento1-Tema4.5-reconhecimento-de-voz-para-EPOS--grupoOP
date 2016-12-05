@@ -1,0 +1,56 @@
+
+Planejamento Tabalho Final SOII
+
+
+Reconhecimento de comandos para controle de objetos inteligentes no Epos:
+
+Lista de Atividades:
+
+Epos Deve:
+1 - Criar componente do SO para o EposMote3 que Leia sinais enviados pelo microfone
+2 - Identificar possiveis comandos dentre os sinais recebidos
+3 - Comprimir arquivo de audio contendo possivel comando
+4 - Enviar arquivo de audio para rede AdHoc de Epos até uma central
+Central deve:
+5 - Receber e decodificar audio
+6 - Codificar audio para .flac
+7 - Enviar para a Google Speach Api
+8 - Receber e interpretar comando
+9 - Enviar comando novamente para o Epos que o requisitou
+Epos deve: 
+10 - Executar comando pedido
+
+Possível planejamento de Etapas do processo:
+1 - Checagem periódica lenta, a procura de um possível comando.
+2 - Caso reconheça uma alteração no sinal começar a gravar, se após 3-4 seg a alteração não cessar, descartar.
+3 - Se cessar é um possível comando.
+4 - Dividir dados em sessões de 20ns, e aplicar DFT (Discrete Fourier Transform) para transformar no domínio da frequencia
+5 - Remover frequencias indevidas.
+6 - Fazer compressão LZ
+7 - Enviar
+8 - No computador descomprimir e decodificar de volta ao domínio de tempo
+9 - Gerar um arquivo .flac
+10 - enviar ao google e aguardar resposta
+11 - enviar resposta ao EPOS e prosseguir com comando
+
+Requisitos do Professor (Cliente):
+RF01: Desenvolver um componente do SO que receba áudio de uma fonte analógica e extraia informações sobre a amplitude em cada faixa de frequência audível
+-> Componente feito porém com amostragem feita de um jeito onde não garante taxa constante de amostragem
+
+RF02: Com base no processamento do áudio (domínio da frequência), descobrir se há algum som ambiente (além do ruído de fundo) ou não
+->Impossível efetuar dft, além de a taxa de amostragem reduzir o espaço de frequencias possíveis
+
+RF03: Com base no processamento do áudio (domínio da frequência), descobrir se o som ambiente corresponde à voz humana
+->voz humana se mantém entre 30 e 3500hz, portanto não seria possível remover frequencias inferiores a 4000hz, ou metade da taxa de amostragem, sem perda de qualidade.
+
+RF04: Se houve voz humana sendo emitida por cerca de 3~4 segundos e depois parou por pelo menos 1 segundo, identificar isso como um possível comando de voz e enviar o mínimo de informação possível pela rede sem fio que permita a posterior identificação das palavras ditas
+->Epos não consegue armazenar mais de 2 segundos de amostras, impossível, nic não operante
+
+RF05. Receber uma mensagem pela rede sem fio e, se for um comando reconhecido, executá-lo
+->Nic nao operante
+
+RNF01. O sistema deve executar sobre a plataforma EposMotes III (desenvolvimento e testes podem ser feitos inicialmente sobre Epos para PC) ok
+
+RNF02. A banda utilizada para transmissão do áudio processado deve ser mínima.
+-> não é utilizada banda... será que conta?...
+-   
